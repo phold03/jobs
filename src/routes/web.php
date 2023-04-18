@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JobsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,10 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::group(['namespace' => 'Home', 'prefix' => 'home'], function () {
     Route::get('/',[HomeController::class, 'index']);
+});
+
+Route::group(['namespace' => 'Jobs', 'prefix' => 'jobs'], function () {
+    Route::get('/',[JobsController::class, 'index']);
+    Route::get('/detail',[JobsController::class, 'detail']);
 });
