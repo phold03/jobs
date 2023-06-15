@@ -1,6 +1,0 @@
-!.gitignore
-/.idea
-/docker-compose.yml
-/_docker
-/.env
-/.env.example
