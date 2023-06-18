@@ -9,13 +9,13 @@
 
             </div>
             <ErrorMessage class="error" name="email" />
-            <div class="form-group last mb-4">
+            <div class="form-group last" style="margin-top: 10px;">
                 <label for="password">Mật khẩu</label>
                 <Field type="password" v-model="model.password" name="password" rules="required|min:8|max:16" id="password"
                     class="form-control" />
 
             </div>
-            <ErrorMessage class="error ml-2" name="password" />
+            <ErrorMessage class="error" name="password" style="margin-bottom: 20px;" />
 
             <div class="d-flex mb-5 align-items-center">
                 <label class="control control--checkbox mb-0"><span class="caption">Remember
@@ -28,7 +28,7 @@
 
             <input type="submit" value="Log In" class="btn btn-block btn-primary">
 
-            <span class="d-block text-left my-4 text-muted">&mdash; Hoặc &mdash;</span>
+            <span class="d-block my-4 text-muted" style="text-align: center;">&mdash; Hoặc &mdash;</span>
 
             <div class="social-login">
                 <a href="#" class="facebook">
@@ -121,5 +121,13 @@ export default {
 .error {
     color: red;
 }
+
+.social-login {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+}
+
 </style>
   
