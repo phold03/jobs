@@ -10,12 +10,12 @@
                     <p class="font-color-white">Lorem ipsum tempus amet conubia adipiscing fermentum viverra gravida,
                         mollis suspendisse pretium dictumst inceptos mattis euismod lorem nulla, magna duis nostra
                         sodales luctus nulla praesent fermentum a elit mollis purus aenean curabitur eleifend </p>
-                    <div class="Post-Jobs">
+                    <div class="Post-Jobs shadow-sm  rounded" >
                         <a href="{{ route('users.login.index') }}" class="">
                             Muốn tìm việc
                         </a>
                     </div>
-                    <div class="Post-Jobs search-seeker">
+                    <div class="Post-Jobs search-seeker shadow-sm  rounded">
                         <a href="" class="">
                             Muốn tìm người
                         </a>
@@ -63,7 +63,7 @@
                 suspendisse pretium dictumst inceptos mattis euismod
             </p>
             <div class="vertical-space-60"> </div>
-            <div class="row">
+            <div class="row  ">
                 @foreach ($majors as $item)
                     <div class="col-lg-3 col-md-6 max-width-50">
                         <div class="box background-color-white-light">
@@ -140,16 +140,15 @@
             <div class="vertical-space-30"></div>
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12">
-                    <div class="owl-carousel Featuread-Company-carousel">
+                    <div class="owl-carousel Featuread-Company-carousel ">
                         @foreach ($company as $item)
-                            <a href="#" class="Featuread-Company-item">
-                                <div class="media text-align-center  media1">
-                                    <img src="{{ $item->logo }}" width="100" alt="John Doe"
-                                        class=" Featuread-Company-img margin-auto">
+                            <a href="#" class="Featuread-Company-item" style="margin:0 15px;" >
+                                <div class="media text-align-center  media1" style="display: grid; width: 100%;justify-content: center;text-align: center; padding:15px !important; ">
+                                    <img src="https://tse4.mm.bing.net/th?id=OIP.UuT5NOGFmPsGBCOubuvQ7gHaE8&pid=Api&P=0&h=180"  alt="John Doe"
+                                        class=" Featuread-Company-img margin-auto" style="width: 100%;height: 100%;margin-bottom:0 !important;">
                                     <div class="media-body text-left text-align-center ">
-                                        <h6>{{ $item->name }}</h6>
-                                        <br />
-                                        <i class=" material-icons">place</i>
+                                        <h6 style="margin-top:10px !important;">{{ $item->name }}</h6>
+                                        <i class=" material-icons" style="margin:10px 0 !important;">place</i>
                                         <span class="text font-size">{{ $item->address }}</span>
                                         <br />
                                         <i class=" material-icons">person</i>
