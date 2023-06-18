@@ -5,7 +5,7 @@
                 <img src="/asset/formCv/image/profile.png" class="profile-img">
                 <div class="blue-box"></div>
             </div>
-            <h2 class="name">TRIỆU VIỆT ĐỨC</h2>
+            <h2 class="name">Lại Đức Phố</h2>
             <p class="n-p"><input type="text" class="custom-input-form-cv pd-10" name="" placeholder="Ngành nghề của bạn">
             </p>
 
