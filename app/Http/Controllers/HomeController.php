@@ -275,6 +275,7 @@ class HomeController extends BaseController
             'status' => StatusCode::OK
         ]);
     }
+
     public function search(Request $request)
     {
         $that = $request;
@@ -351,7 +352,7 @@ class HomeController extends BaseController
             ->distinct()
             ->with('getTime_work')
             ->select('job.*', 'company.logo as logo', 'company.id as idCompany', 'company.name as nameCompany')
-            ->orderBy('employer.prioritize', 'desc')
+            ->orderBy('job.employer_id', 'desc')
             ->get();
         // liên quan
         $dataIdJob = [];
@@ -363,7 +364,7 @@ class HomeController extends BaseController
             ->join('skill', 'job_skill.skill_id', '=', 'skill.id')
             ->join('employer', 'employer.id', '=', 'job.employer_id')
             ->join('company', 'company.id', '=', 'employer.id_company')
-            ->Where(function ($q) use ($that) {
+            ->where(function ($q) use ($that) {
                 if (!empty($that->key)) {
                     $q->orWhere('job.title', 'LIKE', '%' . $that->key . '%');
                 }
@@ -426,7 +427,7 @@ class HomeController extends BaseController
             ->distinct()
             ->with(['getLevel', 'getExperience', 'getWage', 'getprofession', 'getlocation', 'getMajors', 'getwk_form', 'getTime_work', 'getskill'])
             ->select('job.*', 'company.logo as logo', 'company.id as idCompany', 'company.name as nameCompany')
-            ->orderBy('employer.prioritize', 'desc')
+            ->orderBy('job.employer_id', 'desc')
             ->get();
         return view('search', [
             'lever' => $this->getlever(),

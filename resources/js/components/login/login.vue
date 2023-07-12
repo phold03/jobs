@@ -1,11 +1,10 @@
 <template>
     <VeeForm as="div" v-slot="{ handleSubmit }" @invalid-submit="onInvalidSubmit">
-        <form>
-            <input type="hidden" :value="csrfToken" name="_token" />
             <div class="account-popup">
                 <span class="close-popup"><i class="la la-close"></i></span>
                 <h3>Đăng nhập</h3>
                 <form @submit="handleSubmit($event, onSubmit)" ref="formData" method="POST" :action="data.urlStore">
+                    <input type="hidden" :value="csrfToken" name="_token" />
                     <div class="cfield">
                         <Field type="email" name="email" v-model="model.email" rules="required|email" placeholder="Email" />
                         <i class="la la-user"></i>
@@ -34,10 +33,9 @@
                     </div>
                 </div>
             </div>
-        </form>
     </VeeForm>
 </template>
-  
+
 <script>
 import {
     Form as VeeForm,
@@ -115,4 +113,3 @@ export default {
     color: red;
 }
 </style>
-  
