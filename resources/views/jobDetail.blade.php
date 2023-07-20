@@ -31,8 +31,9 @@
                             <div class="job-single-head">
                                 <div class="job-thumb"> <img src="{{ asset($job->logo) }}" alt="" /> </div>
                                 <div class="job-head-info">
-                                    <h4>{{ $job->nameCompany }}</h4>
-                                    <span>{{ $job->address }}</span>
+                                    <h4>{{ $job->title }}</h4>
+                                    <span><a
+                                            href="{{ route('company.detail', $job->idCompany) }}">{{ $job->nameCompany }}</a></span>
                                     <p><i class="la la-envelope-o"></i> {{ $job->emailCompany }}</p>
                                 </div>
                             </div><!-- Job Head -->
@@ -59,14 +60,14 @@
                                                     <div class="c-logo"> <img src="{{ asset($rule->logo) }}"
                                                             alt="" />
                                                     </div>
-                                                    <h3><a href="#" title="">{{ $rule->title }}</a></h3>
+                                                    <h3><a href="{{ route('client.detail', [$rule->slug, $rule->id]) }}"
+                                                            title="">{{ $rule->title }}</a></h3>
                                                     <div class="job-lctn"><i
                                                             class="la la-map-marker"></i>{{ $rule->address }}
                                                     </div>
                                                 </div>
                                                 <div class="job-style-bx">
                                                     <span class="job-is ft">{{ $rule->getTime_work->name }}</span>
-                                                    <span class="fav-job"><i class="la la-heart-o"></i></span>
                                                     <i>{{ $rule->end_job_time }}</i>
                                                 </div>
                                             </div>
@@ -77,9 +78,21 @@
                         </div>
                     </div>
                     <div class="col-lg-4 column">
-                        <a class="apply-thisjob" href="#" data-toggle="modal" data-target="#exampleModal"><i class="la la-paper-plane"></i>Nộp đơn</a>
-                        <div class="apply-alternative" style="cursor: pointer">
-                            <span><i class="fa fa-heart"></i>Lưu</span>
+                        <div class="apply-job-for-checker">
+                            @if (Auth::guard('user')->check())
+                                @if ($checkJobTrue == 1)
+                                    <a class="apply-thisjob" href="#" style="background: #8b91dd; color: #fff"><i
+                                            class="la la-paper-plane"></i>Đã ứng tuyển</a>
+                                @else
+                                    <a class="apply-thisjob" href="#" data-toggle="modal"
+                                        data-target="#exampleModal"><i class="la la-paper-plane"></i>Nộp đơn</a>
+                                @endif
+                                <div class="apply-alternative btn-like" style="cursor: pointer">
+                                    <span><i class="fa fa-heart icon-save-cv"
+                                            id="{{ $job->id . ',' . $checklove }}"></i>Lưu</span>
+                                @else
+                                    <a class="apply-thisjob" href="#"><i class="la la-paper-plane"></i>Nộp đơn</a>
+                            @endif
                         </div>
                         <div class="job-overview">
                             <h3>Tổng quan về công việc</h3>
@@ -117,6 +130,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

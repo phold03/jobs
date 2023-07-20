@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Modernize Free</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="shortcut icon" type="image/png" href="{{ asset('employer/images/logos/favicon.png') }}" />
     <link rel="stylesheet" href="{{ asset('employer/css/styles.min.css') }}" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -51,7 +52,11 @@
                     </p>
                 </div>
             </div>
+            <div class="loading-div hidden">
+                <div class="loader-img"></div>
+            </div>
         </div>
+
     </div>
     <script src="{{ asset('employer/libs/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('employer/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>

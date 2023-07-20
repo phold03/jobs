@@ -91,8 +91,8 @@ $(document).ready(function () {
                 if (x.data.data) {
                     if (x.data.data.job_id == id) {
                         $('.icon-save-cv').addClass('btn-icon-love')
-                        const btnLike = document.querySelector('.icon-save-cv')
-                        btnLike.addEventListener("click", function (e) {
+                        const btnLike = $('.icon-save-cv')
+                        btnLike.click(function (e) {
                             axios.post('/viec-lam/favourite/' + id)
                                 .then((a) => {
                                 }).catch((y) => {
@@ -101,8 +101,8 @@ $(document).ready(function () {
                         })
                     }
                 } else {
-                    const btnLike = document.querySelector('.icon-save-cv')
-                    btnLike.addEventListener("click", function (e) {
+                    const btnLike = $('.icon-save-cv')
+                    btnLike.click(function (e) {
                         axios.post('/viec-lam/favourite/' + id)
                             .then((a) => {
                             }).catch((y) => {
@@ -117,6 +117,7 @@ $(document).ready(function () {
 })
 
 const app = createApp({});
+
 // noty
 import Notyf from "./components/common/notyf.vue";
 app.component("notyf", Notyf);
@@ -128,7 +129,9 @@ app.component("form-search-home", FormSearch);
 import Login from './components/login/login.vue';
 app.component('login-user', Login);
 
-
+// toggle button
+import btnToggel from './components/common/btnToggel.vue';
+app.component('btn-toggle', btnToggel);
 
 
 // cv
@@ -144,6 +147,16 @@ app.component('rating-cv', RatingCv)
 // file cv
 import createCv from './components/seeker/cv/create.vue'
 app.component('create-cv', createCv)
+// đăng ký ntd
+import formRegister from "./components/client/register.vue";
+app.component('form-register', formRegister);
+
+// đăng ký uv
+import formRegisterUser from "./components/login/register.vue";
+app.component('form-register-user', formRegisterUser);
+// đổi mật khẩu
+import changePassword from "./components/seeker/changePassword.vue";
+app.component('change-password', changePassword);
 app.mount('#app');
 
 

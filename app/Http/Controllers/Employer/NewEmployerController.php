@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Employer;
 
+use App\Enums\StatusCode;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmployerCreateRequest;
+use App\Http\Requests\ReasonCvRequest;
 use App\Models\Accuracy;
 use App\Models\Employer;
 use App\Models\Job;
@@ -60,6 +62,18 @@ class NewEmployerController extends BaseController
      */
     public function create()
     {
+        $checkCompany = Employer::query()->where('user_id', Auth::guard('user')->user()->id)->first();
+        if ($checkCompany->id_company) {
+            $checkCompanyXt = Accuracy::where('user_id', $checkCompany->id_company)->first();
+            if (!$checkCompanyXt) {
+                return redirect()->route('employer.new.index');
+            }
+            if ($checkCompanyXt->status == 0) {
+                return redirect()->route('employer.new.index');
+            }
+        } else {
+            return redirect()->route('employer.new.index');
+        }
         return view('employer.new.create', [
             'lever' => $this->getlever(),
             'experience' => $this->getexperience(),
@@ -232,12 +246,16 @@ class NewEmployerController extends BaseController
         try {
             Jobskill::query()->where('job_id', $id)->delete();
             Job::query()->find($id)->delete();
-            $this->setFlash(__('Xóa thành công'));
-            return redirect()->route('employer.new.index');
+            return response()->json([
+                'message' => 'Quá trình thực hiện thành công!',
+                'status' => StatusCode::OK,
+            ], StatusCode::OK);
         } catch (\Throwable $th) {
             DB::rollBack();
-            $this->setFlash(__('Đã có một lỗi sảy ra'), 'error');
-            return redirect()->route('employer.new.index');
+            return response()->json([
+                'message' => 'Có một lỗi không xác định đã xảy ra',
+                'status' => StatusCode::FORBIDDEN,
+            ], StatusCode::OK);
         }
     }
     public function changeStatusCv($id)
@@ -249,7 +267,7 @@ class NewEmployerController extends BaseController
             'status' => 200
         ];
     }
-    public function reasonCv(Request $request)
+    public function reasonCv(ReasonCvRequest $request)
     {
         try {
             // change status
@@ -269,7 +287,8 @@ class NewEmployerController extends BaseController
             $this->setFlash(__('Phản hồi thành công'));
             return back();
         } catch (\Throwable $th) {
-            dd($th);
+            DB::rollBack();
+            dd($th->getMessage());
         }
     }
     public function getDataReason($id)
@@ -296,5 +315,77 @@ class NewEmployerController extends BaseController
         return view('employer.new.submittedWork', [
             'cv' => $cv
         ]);
+    }
+    public function topNew()
+    {
+        $checkCompany = Employer::query()->where('user_id', Auth::guard('user')->user()->id)->first();
+        $job = Job::query()->where([
+            ['job.employer_id', $checkCompany->id],
+        ])->with(['AllCv'])
+            ->join('employer', 'employer.id', '=', 'job.employer_id')
+            ->where('package_id_position', 1)
+            ->select('job.*')
+            ->Orderby('job.expired', 'ASC')
+            ->get();
+        $allJob = Job::query()->where([
+            ['employer_id', $checkCompany->id],
+            ['expired', 0],
+            ['package_id_position', 0],
+        ])->select('id', 'title')
+            ->get();
+        return view('employer.new.topNew', [
+            'job' => $job,
+            'allJob' => $allJob,
+        ]);
+    }
+    public function upTopNew(Request $request)
+    {
+        $checkCompany = Employer::query()->where('user_id', Auth::guard('user')->user()->id)->first();
+        $allJob = Job::query()->where([
+            ['employer_id', $checkCompany->id],
+            ['expired', 0],
+            ['package_id_position', 1],
+        ])->count();
+        if (count($request->job) > $checkCompany->amount_job) {
+            $this->setFlash(__('Số lượng bài viết được hiển thị trên top của bạn đã quá múc cho phép'), 'error');
+            return redirect()->back();
+        }
+        if ($allJob == $checkCompany->amount_job) {
+            $this->setFlash(__('Số lượng bài viết được hiển thị trên top của bạn đã quá múc cho phép'), 'error');
+            return redirect()->back();
+        }
+        try {
+            foreach ($request->job as $value) {
+                $job = Job::query()->where('id', $value)->first();
+                $job->package_id_position = 1;
+                $job->save();
+            }
+            $this->setFlash(__('Quá trình thực thiện thành công!'));
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+            DB::rollBack();
+            $this->setFlash(__('Có một lỗi không mong muốn đã xảy ra'), 'error');
+            return redirect()->back();
+        }
+    }
+    public function deleteTopNew($id)
+    {
+        try {
+            $job = Job::query()->find($id);
+            $job->package_id_position = 0;
+            $job->save();
+            return response()->json([
+                'message' => 'Quá trình thực hiện thành công!',
+                'status' => StatusCode::OK,
+            ], StatusCode::OK);
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Có một lỗi không xác định đã xảy ra',
+                'status' => StatusCode::FORBIDDEN,
+            ], StatusCode::OK);
+        }
     }
 }

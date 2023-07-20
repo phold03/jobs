@@ -13,7 +13,6 @@
 }
 
 .resume-box {
-    width: 800px;
     height: auto;
     margin: 100px auto;
     background: var(--white);
@@ -22,7 +21,7 @@
 
 .left-section {
     background: var(--black);
-    width: 250px;
+    width: 248px;
     height: 1423px;
     float: left;
 }
@@ -62,7 +61,7 @@
     letter-spacing: 2px;
     font-weight: 400;
     text-transform: uppercase;
-    width: 247px;
+    /* width: 247px; */
 }
 
 .name span {
@@ -141,7 +140,6 @@
     margin: 0 auto;
     padding: 7px;
     border-bottom: 1px solid var(--lightgray);
-    border-top: 1px solid var(--lightgray);
     color: #5D87FF;
     text-transform: uppercase;
     font-size: 18px;
@@ -277,5 +275,5 @@
 }
 
 .pd-5 {
-    padding: 3px;
+    padding: 2px;
 }

@@ -16,6 +16,7 @@ class User  extends Model
         'role_id',
         'status',
         'images',
+        'slug'
     ];
     protected $hidden = [
         'password',
@@ -36,7 +37,7 @@ class User  extends Model
     }
     public function getProfileUse()
     {
-        return $this->hasOne(Jobseeker::class, 'user_role', 'id');
+        return $this->hasOne(Jobseeker::class, 'user_id', 'id');
     }
     public function getskill()
     {

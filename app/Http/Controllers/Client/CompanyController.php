@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -14,7 +15,10 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        //
+        $company = Company::query()->with('employer.job')->get();
+        return view('client.company.index', [
+            'company' => $company
+        ]);
     }
 
     /**
@@ -82,7 +86,11 @@ class CompanyController extends Controller
     {
         //
     }
-    public function detail($slug){
-
+    public function detail($id)
+    {
+        $company = Company::query()->with('employer.job')->find($id);
+        return view('client.company.show', [
+            'company' => $company
+        ]);
     }
 }

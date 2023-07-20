@@ -21,6 +21,9 @@
                                     <th class="border-bottom-0">
                                         <h6 class="fw-semibold mb-0">Ngày nộp đơn</h6>
                                     </th>
+                                    <th class="border-bottom-0">
+                                        <h6 class="fw-semibold mb-0"></h6>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -34,7 +37,8 @@
                                             <a href="{{ route('client.detail', [$item->slug, $item->id]) }}">
                                                 <h6 class="fw-semibold mb-1">{{ $item->title }}</h6>
                                             </a>
-                                            <span class="fw-normal">{{ $item->nameCompany }}</span>
+                                            <span class="fw-normal"><a
+                                                    href="{{ route('company.detail', $item->id) }}">{{ $item->nameCompany }}</a></span>
                                         </td>
                                         <td class="border-bottom-0">
                                             <div class="align-items-center gap-2">
@@ -57,6 +61,9 @@
                                         </td>
                                         <td class="border-bottom-0">
                                             <h6 class="fw-semibold mb-0 fs-4">{{ $item->created_at }}</h6>
+                                        </td>
+                                        <td class="border-bottom-0">
+                                            <a href="{{ asset($item->file) }}">Xem Cv</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -85,7 +92,7 @@
     </div>
     <script>
         async function Reason(id) {
-            const url = '/employers/new/get-data-reason/' + id.id;
+            const url = '/employers/new/get-data-reason/' + id.id_save_cv;
             await axios.get(url).then(function(res) {
                 $('#dataReasonCv').text(res.data.data.content);
             })

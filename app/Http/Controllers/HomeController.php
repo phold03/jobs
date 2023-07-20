@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Enums\StatusCode;
-use App\Mail\MailNotifyCV;
+use App\Events\User\MailApplyJobEvent;
 use App\Models\Company;
 use App\Models\Favourite;
 use App\Models\Job;
-use App\Models\Jobseeker;
 use App\Models\Jobskill;
+use App\Models\KeyUserSearch;
 use App\Models\location;
 use App\Models\Majors;
 use App\Models\SaveCv;
@@ -17,7 +17,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 
 class HomeController extends BaseController
 {
@@ -33,7 +32,7 @@ class HomeController extends BaseController
         $location = location::query()->get();
 
         $allJob = Job::query()->get();
-
+        // Việc làm nổi bật
         $jobForUser = Job::query()
             ->join('employer', 'employer.id', '=', 'job.employer_id')
             ->join('company', 'company.id', '=', 'employer.id_company')
@@ -46,67 +45,28 @@ class HomeController extends BaseController
             ->select('job.*', 'company.logo as logo', 'company.id as idCompany', 'company.name as nameCompany', 'company.address as addressCompany')
             ->orderBy('employer.prioritize', 'desc')
             ->get();
-        if (Auth::guard('user')->check()) {
-            $user = User::query()->with('getProfileUse')->where('id', Auth::guard('user')->user()->id)->first();
-
-            if ($user->getProfileUse) {
-                $getskill = Jobseeker::query()->with('getskill')->where('user_role', Auth::guard('user')->user()->id)->first();
-                $skill_id = $getskill->getskill->pluck('id');
-                $getProfile = $user->getProfileUse;
-                $job = Job::query()
-                    ->join('job_skill', 'job_skill.job_id', '=', 'job.id')
-                    ->join('skill', 'job_skill.skill_id', '=', 'skill.id')
-                    ->join('employer', 'employer.id', '=', 'job.employer_id')
-                    ->join('company', 'company.id', '=', 'employer.id_company')
-                    ->where([
-                        ['job.status', 1],
-                        ['job.expired', 0],
-                        ['job.package_id_position', 1],
-                        ['employer.position', 1],
-                    ])
-                    ->where(function ($query) use ($getProfile, $skill_id) {
-                        $query->orWhere(function ($q) use ($skill_id) {
-                            $q->whereIn('job_skill.skill_id', $skill_id);
-                        })
-                            ->orWhere(
-                                'job.location_id',
-                                $getProfile->location_id
-                            )
-                            ->orWhere(
-                                'job.profession_id',
-                                $getProfile->profession
-                            )
-                            ->orWhere(
-                                'job.experience_id',
-                                $getProfile->experience
-                            )
-                            ->orWhere(
-                                'job.time_work_id',
-                                $getProfile->time_work_id
-                            )
-                            ->orWhere(
-                                'job.level_id',
-                                $getProfile->lever_id
-                            );
-                    })
-                    ->distinct()
-                    ->select('job.*', 'company.logo as logo', 'company.id as idCompany', 'company.name as nameCompany')
-                    ->orderBy('employer.prioritize', 'desc')
-                    ->get();
-            } else {
-                $job = $jobForUser;
-            }
-        } else {
-            $job = $jobForUser;
-        }
+        // việc làm hấp dẫn
+        $jobAttractive = Job::query()
+            ->join('employer', 'employer.id', '=', 'job.employer_id')
+            ->join('company', 'company.id', '=', 'employer.id_company')
+            ->where([
+                ['job.status', 1],
+                ['job.expired', 0],
+                ['job.package_id_position', 0],
+                ['employer.position', 1],
+            ])
+            ->select('job.*', 'company.logo as logo', 'company.id as idCompany', 'company.name as nameCompany', 'company.address as addressCompany')
+            ->orderBy('employer.prioritize', 'desc')
+            ->get();
         // company
         $company = Company::query()->with('employer.job')->get();
         return view('index', [
             'majors' => $majors,
-            'job' => $job,
+            'job' => $jobForUser,
             'location' => $location,
             'company' => $company,
             'countJob' => $allJob->count(),
+            'jobAttractive' => $jobAttractive,
         ]);
     }
 
@@ -155,7 +115,6 @@ class HomeController extends BaseController
                 $checkJobTrue = 0;
             }
         }
-        // dd($checkJobTrue);
         return view('jobDetail', [
             'job' => $job,
             'rules' => $relate,
@@ -236,15 +195,7 @@ class HomeController extends BaseController
                 $cvUpload->save();
             }
         }
-        $emailCompany = Job::query()->join('employer', 'employer.id', '=', 'job.employer_id')
-            ->join('users', 'users.id', '=', 'employer.user_id')
-            ->select('users.email as email')->first();
-        $firstJob = Job::query()->find($request->id_job);
-        $mailContents = [
-            'job' => $firstJob
-        ];
-        Mail::to($emailCompany->email)->send(new MailNotifyCV($mailContents));
-
+        event(new MailApplyJobEvent($request->id_job));
         $this->setFlash(__('Hãy chờ phản hồi của nhà tuyển dụng'));
         return redirect()->back();
     }
@@ -275,9 +226,23 @@ class HomeController extends BaseController
             'status' => StatusCode::OK
         ]);
     }
-
     public function search(Request $request)
     {
+        if ($request->key) {
+            $checkKeySearch = KeyUserSearch::query()->where('key', $request->key)->first();
+            if ($checkKeySearch) {
+                if ($checkKeySearch->key == $request->key) {
+                    $keySearch = $checkKeySearch;
+                    $keySearch->count += 1;
+                }
+            } else {
+                $keySearch = new KeyUserSearch();
+                $keySearch->count = 1;
+            }
+            $keySearch->key = $request->key;
+            $keySearch->user_id = Auth::guard('user')->user()->id;
+            $keySearch->save();
+        }
         $that = $request;
         $data = Job::query()
             ->join('job_skill', 'job_skill.job_id', '=', 'job.id')
@@ -289,7 +254,7 @@ class HomeController extends BaseController
                     $q->where('job.title', 'LIKE', '%' . $that->key . '%');
                 }
                 if (!empty($that->skill)) {
-                    if ($that->skill[0] != null) {
+                    if (!empty($that->skill[0])) {
                         $q->whereIn('job_skill.skill_id', $that->skill);
                     }
                 }
@@ -351,83 +316,9 @@ class HomeController extends BaseController
             ->with('getWage')
             ->distinct()
             ->with('getTime_work')
+            ->with('getlocation')
             ->select('job.*', 'company.logo as logo', 'company.id as idCompany', 'company.name as nameCompany')
-            ->orderBy('job.employer_id', 'desc')
-            ->get();
-        // liên quan
-        $dataIdJob = [];
-        foreach ($data as $value) {
-            $dataIdJob[] = $value->id;
-        }
-        $datalq = Job::query()
-            ->join('job_skill', 'job_skill.job_id', '=', 'job.id')
-            ->join('skill', 'job_skill.skill_id', '=', 'skill.id')
-            ->join('employer', 'employer.id', '=', 'job.employer_id')
-            ->join('company', 'company.id', '=', 'employer.id_company')
-            ->where(function ($q) use ($that) {
-                if (!empty($that->key)) {
-                    $q->orWhere('job.title', 'LIKE', '%' . $that->key . '%');
-                }
-                if (!empty($that->skill)) {
-                    if ($that->skill[0] != null) {
-                        $q->orWhere(function ($q) use ($that) {
-                            $q->whereIn('job_skill.skill_id', $that->skill);
-                        });
-                    }
-                }
-                if (!empty($that->location)) {
-                    $q->orWhere(
-                        'job.location_id',
-                        $that->location
-                    );
-                }
-                if (!empty($that->profession)) {
-                    $q->orWhere(
-                        'job.profession_id',
-                        $that->profession
-                    );
-                }
-                if (!empty($that->experience)) {
-                    $q->orWhere(
-                        'job.experience_id',
-                        $that->experience
-                    );
-                }
-                if (!empty($that->timework)) {
-                    $q->orWhere(
-                        'job.time_work_id',
-                        $that->timework
-                    );
-                }
-
-                if (!empty($that->workingform)) {
-                    $q->orWhere(
-                        'job.wk_form_id',
-                        $that->workingform
-                    );
-                }
-                if (!empty($that->majors)) {
-                    $q->orWhere(
-                        'job.majors_id',
-                        $that->majors
-                    );
-                }
-                if (!empty($that->lever)) {
-                    $q->orWhere(
-                        'job.level_id',
-                        $that->lever
-                    );
-                }
-            })
-            ->where([
-                ['job.status', 1],
-                ['job.expired', 0],
-            ])
-            ->whereNotIn('job.id', $dataIdJob)
-            ->distinct()
-            ->with(['getLevel', 'getExperience', 'getWage', 'getprofession', 'getlocation', 'getMajors', 'getwk_form', 'getTime_work', 'getskill'])
-            ->select('job.*', 'company.logo as logo', 'company.id as idCompany', 'company.name as nameCompany')
-            ->orderBy('job.employer_id', 'desc')
+            ->orderBy('employer.prioritize', 'desc')
             ->get();
         return view('search', [
             'lever' => $this->getlever(),
@@ -441,7 +332,6 @@ class HomeController extends BaseController
             'workingform' => $this->getworkingform(),
             'request' => $request->all(),
             'job' => $data,
-            'datalq' => $datalq,
         ]);
     }
 }

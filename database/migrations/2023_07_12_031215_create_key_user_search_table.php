@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateTitleProfileCvTable extends Migration
+class CreateKeyUserSearchTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class UpdateTitleProfileCvTable extends Migration
      */
     public function up()
     {
-        Schema::table('profile_user_cv', function (Blueprint $table) {
-            $table->string('title');
+        Schema::create('key_user_search', function (Blueprint $table) {
+            $table->id();
+            $table->string('key');
+            $table->integer('user_id');
+            $table->integer('count');
+            $table->timestamps();
         });
     }
 
@@ -25,6 +29,6 @@ class UpdateTitleProfileCvTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('key_user_search');
     }
 }

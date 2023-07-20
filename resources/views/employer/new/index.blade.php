@@ -4,6 +4,8 @@
         <div class="card-body">
             <h5 class="card-title fw-semibold mb-4">Danh sách tin tuyển dụng</h5>
             <a href="{{ route('employer.new.create') }}" class="btn btn-primary">Thêm mới</a>
+            <a href="{{ route('employer.new.topNew') }}" class="btn btn-primary" style="margin-left: 10px">Đẩy tim lên Top hiển
+                thị</a>
             <div class="table-responsive mt-4">
                 <table class="table" id="dataTable" width="100%" cellspacing="0">
                     <thead>
@@ -27,13 +29,14 @@
                                 <td>{{ $item->job_time }}</td>
                                 <td>{{ $item->end_job_time }}</td>
                                 <td><span
-                                        class="badge p-1 {{ $item->status == 1 ? 'bg-success text-white' : 'bg-secondary text-white' }}">{{ $item->status == 0 ? 'Bản nháp' : 'Đang hoạt động' }}</span>
+                                        class="badge p-1 {{ $item->expired == 0 ? 'bg-success text-white' : 'bg-dark text-white' }}">{{ $item->expired == 1 ? 'Hết hạn' : 'Đang hoạt động' }}</span>
                                 </td>
                                 <td>
                                     <a href="{{ route('employer.new.edit', $item->id) }}"><i class="fas fa-edit"></i></a>
                                     |
-                                    <a href="{{ route('employer.new.destroy', $item->id) }}"><i
-                                            class="fas fa-trash-alt"></i></a>
+                                    <btn-delete :message-confirm="{{ json_encode('Bạn có chắc muốn xóa bài viết?') }}"
+                                        :delete-action="{{ json_encode(route('employer.new.destroy', $item->id)) }}">
+                                    </btn-delete>
                                 </td>
                             </tr>
                         @endforeach

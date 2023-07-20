@@ -88,16 +88,41 @@
                         <span class="hide-menu">Thông tin doanh nghiệp</span>
                     </a>
                 </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{ route('employer.company.business') }}" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-user-plus"></i>
+                        </span>
+                        <span class="hide-menu">Giấy phép kinh doanh</span>
+                    </a>
+                </li>
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">EXTRA</span>
+                    <span class="hide-menu">Chức năng</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="./icon-tabler.html" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('employer.payment-for-emplyer.index') }}"
+                        aria-expanded="false">
                         <span>
                             <i class="ti ti-mood-happy"></i>
                         </span>
-                        <span class="hide-menu">Icons</span>
+                        <span class="hide-menu">Nạp tiền</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{ route('employer.payment-history.index') }}" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-mood-happy"></i>
+                        </span>
+                        <span class="hide-menu">Lịch sử giao dịch</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{ route('employer.changePassword') }}" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-mood-happy"></i>
+                        </span>
+                        <span class="hide-menu">Đổi mật khẩu</span>
                     </a>
                 </li>
                 <li class="sidebar-item">

@@ -38,18 +38,26 @@ class ProfileUserCv extends Model
      * @var string
      */
     protected $keyType = 'integer';
+    /**
+     * @var array
+     */
+    protected $casts  = [
+        'skill' => 'array',
+        'project' => 'array',
+        'level' => 'array',
+    ];
 
     /**
      * @var array
      */
-    protected $fillable = ['images', 'status_profile', 'majors', 'user_id', 'status', 'email', 'address', 'phone', 'skill', 'certificate', 'target', 'work', 'work_detail', 'project', 'project_detail', 'created_at', 'updated_at'];
+    protected $fillable = ['name', 'email', 'address', 'phone', 'skill', 'about', 'level', 'project', 'user_id', 'status', 'link_fb', 'majors', 'status_profile', 'images', 'title', 'link_inta', 'created_at', 'updated_at', 'link_sky', 'link_tw'];
     public function user()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
     public function Profile()
     {
-        return $this->hasOne(Jobseeker::class, 'user_role', 'user_id');
+        return $this->hasOne(Jobseeker::class, 'user_id', 'user_id');
     }
     public function employerPayment()
     {
