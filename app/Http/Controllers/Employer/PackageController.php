@@ -46,7 +46,7 @@ class PackageController extends BaseController
             ->where('company_id', $employer->id)
             ->first();
         if ($checkpaPhageForEmployer) {
-            $package = jobAttractive::query()->whereNotIn('id', $checkpaPhageForEmployer->pluck('attractive_id'))->get();
+            $package = jobAttractive::query()->whereNotIn('id', [$checkpaPhageForEmployer->toArray()['attractive_id']])->get();
         }
         return view('employer.package.index', [
             'checkPackage' => $checkPackage,
@@ -82,6 +82,7 @@ class PackageController extends BaseController
     }
     public function payment(Request $request)
     {
+        // dd($request->all());
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         $vnp_Returnurl = route('employer.package.return');
         $vnp_TmnCode = "S50PEHFY"; //Mã website tại VNPAY 
