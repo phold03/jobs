@@ -16,7 +16,15 @@
 
     <!-- Style -->
     <link rel="stylesheet" href="{{ asset('login/css/style.css') }}">
-    
+    <script>
+        window.Laravel = {!! json_encode(
+            [
+                'csrfToken' => csrf_token(),
+                'baseUrl' => url('/'),
+            ],
+            JSON_UNESCAPED_UNICODE,
+        ) !!};
+    </script>
 
     <title>Login #7</title>
 </head>
@@ -24,6 +32,13 @@
 <body id="app">
     <div class="container contents">
         <div class="col-md-12">
+            @yield('main')
+            @if (session()->get('Message.flash'))
+                <notyf :data="{{ json_encode(session()->get('Message.flash')[0]) }}"></notyf>
+            @endif
+            @php
+                session()->forget('Message.flash');
+            @endphp
         </div>
     </div>
 
