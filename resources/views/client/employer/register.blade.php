@@ -1,4 +1,5 @@
-
+@extends('client.employer.index')
+@section('main')
     <form-register
         :data="{{ json_encode([
             'urlRegister' => route('register.store'),
@@ -6,5 +7,5 @@
             'location' => $location,
             'request' => $request,
         ]) }}">
-
     </form-register>
+@endsection

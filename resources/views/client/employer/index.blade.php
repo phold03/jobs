@@ -16,6 +16,7 @@
 
     <!-- Style -->
     <link rel="stylesheet" href="{{ asset('login/css/style.css') }}">
+    
 
     <title>Login #7</title>
 </head>
@@ -23,7 +24,6 @@
 <body id="app">
     <div class="container contents">
         <div class="col-md-12">
-           
         </div>
     </div>
 
