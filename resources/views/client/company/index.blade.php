@@ -1,5 +1,4 @@
-
-    <section>
+<section>
         <div class="block no-padding">
             <div class="container fluid">
                 <div class="row">
