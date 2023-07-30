@@ -1,6 +1,4 @@
-@extends('employer.layout.index')
-@section('main-employer')
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
         .card-box {
             padding: 20px;
@@ -58,7 +56,6 @@
         <div class="content">
             <div class="container">
                 <div class="row">
-                    @foreach ($cv as $item)
                         <div class="col-lg-4">
                             <div class="text-center card-box">
                                 <div class="member-card pt-2 pb-2">
@@ -67,10 +64,9 @@
                                             class="rounded-circle img-thumbnail" alt="profile-image" style="width: 150px; height: 150px;">
                                     </div>
                                     <div class="">
-                                        <h4>{{ $item->profileCv->name }}</h4>
                                         <p class="text-muted"> </span><span><a
                                                     href="{{ route('employer.search.show', $item->id) }}"
-                                                    class="text-pink">{{ $item->profileCv->majors }}</a></span></p>
+                                                    class="text-pink"></a></span></p>
                                     </div>
                                     <a href="{{ route('employer.search.show', $item->profileCv->id) }}"
                                         class="btn btn-primary mt-3 btn-rounded waves-effect w-md waves-light">Xem chi
@@ -78,12 +74,9 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
-
                     <!-- end col -->
                 </div>
             </div>
             <!-- container -->
         </div>
     </div>
-@endsection
