@@ -1,3 +1,4 @@
+
 <script>
 import Loader from "./loader.vue";
 import axios from "axios";
@@ -12,6 +13,7 @@ export default {
   components: {
     Loader,
   },
+  props: ["deleteAction", "listUrl", "messageConfirm"],
   mounted() { },
   methods: {
     showAlert() {
@@ -24,7 +26,31 @@ export default {
         showCancelButton: true,
       }).then((result) => {
         if (result.value) {
-          }      });
+          that.flagShowLoader = true;
+          $(".loading-div").removeClass("hidden");
+          axios
+            .delete(that.deleteAction, {
+              _token: Laravel.csrfToken,
+            })
+            .then(function (response) {
+              that.flagShowLoader = false;
+              $(".loading-div").addClass("hidden");
+              that
+                .$swal({
+                  title: response.data.message,
+                  icon: "success",
+                  confirmButtonText: "đóng lại",
+                })
+                .then(function () {
+                  //   window.location.href = that.listUrl;
+                  location.reload();
+                });
+            })
+            .catch((error) => {
+              that.flagShowLoader = false;
+            });
+        }
+      });
     },
   },
 };
