@@ -2,21 +2,12 @@
   <div class="layout-search">
     <section class="overlape">
       <div class="block no-padding">
-        <div
-          data-velocity="-.1"
-          style="
-            background: url('/home/images/resource/mslider1.jpg') repeat scroll
-              50% 422.28px transparent;
-          "
-          class="parallax scrolly-invisible no-parallax"
-        ></div>
-        <!-- PARALLAX BACKGROUND IMAGE -->
         <div class="container fluid">
           <div class="row">
             <div class="col-lg-12">
               <div class="inner-header">
                 <h3>
-                  Tìm thấy {{ data.job.length }} công việc phù hợp với bạn
+                  Tìm thấy 0 công việc phù hợp với bạn
                 </h3>
               </div>
             </div>
@@ -30,7 +21,6 @@
         <div class="container">
           <div class="row no-gape">
             <aside class="col-lg-3 column mb-5">
-              <form action="">
                 <div class="widget">
                   <div class="search_widget_job">
                     <div class="field_w_search">
@@ -180,43 +170,20 @@
                   <h3 class="sb-title open">Thời gian làm việc</h3>
                   <div class="specialism_widget">
                     <div class="simple-checkbox scrollbar">
-                      <p v-for="item in data.timework" :key="item.id">
-                        <input
-                          type="radio"
-                          :checked="item.id == data.request.timework"
-                          v-model="item.id"
-                          :value="item.id"
-                          :id="'timework' + item.id"
-                          name="timework"
-                        /><label :for="'timework' + item.id">{{
-                          item.label
-                        }}</label>
-                      </p>
                     </div>
                   </div>
                 </div>
                 <button class="btn btn-primary" type="submit">Lọc</button>
-              </form>
             </aside>
             <div class="col-lg-9 column">
               <div class="emply-resume-sec" id="paginated-list">
                 <div
                   class="emply-resume-list square"
-                  v-for="item in data.job"
-                  :key="item.id"
                 >
                   <div class="render-job-search">
                     <div class="emply-resume-thumb">
-                      <img :src="url + '/' + item.logo" alt="" />
                     </div>
                     <div class="emply-resume-info">
-                      <h3>
-                        <a
-                          :href="url + '/viec-lam/' + item.slug + '.' + item.id"
-                          title=""
-                          v-html="item.title"
-                        ></a>
-                      </h3>
                       <span><i v-html="item.get_majors.name"></i></span>
                       <p>
                         <i class="la la-map-marker"></i
@@ -228,7 +195,6 @@
                     <a href="#" title="">{{ item.get_wage.name }}</a>
                   </div>
                 </div>
-                <!-- Emply List -->
                 <div class="row">
                   <div
                     class="col-lg-12 col-md-12 col-sm-12 job-list browse-all-cat"
