@@ -22,18 +22,11 @@ export default {
   components: {
     Loader,
   },
-  props: ["deleteAction", "listUrl", "messageConfirm"],
   mounted() {},
   methods: {
     showAlert() {
       let that = this;
-      this.$swal({
-        title: that.messageConfirm,
-        icon: "warning",
-        confirmButtonText: "Xóa",
-        cancelButtonText: "Đóng lại",
-        showCancelButton: true,
-      }).then((result) => {
+     
         if (result.value) {
           that.flagShowLoader = true;
           window.$(".loading-div").removeClass("hidden");
@@ -48,21 +41,8 @@ export default {
                   x: "right",
                   y: "bottom",
                 },
-                types: [
-                  {
-                    type: "error",
-                    duration: 8000,
-                    dismissible: true,
-                  },
-                ],
+               
               });
-              if (response.data.status == 403) {
-                setTimeout(function () {
-                  location.reload();
-                }, 1100);
-                return notyf.error(response.data.message);
-              }
-
               setTimeout(function () {
                 location.reload();
               }, 1100);
@@ -71,9 +51,7 @@ export default {
             .catch((error) => {
               that.flagShowLoader = false;
             });
-        }
-      });
-    },
+    }},
   },
 };
 </script>
