@@ -22,7 +22,6 @@ export default {
   components: {
     Loader,
   },
-  props: ["deleteAction", "listUrl", "messageConfirm"],
   mounted() {},
   methods: {
     showAlert() {
@@ -30,9 +29,7 @@ export default {
       this.$swal({
         title: that.messageConfirm,
         icon: "warning",
-        confirmButtonText: "Xóa",
-        cancelButtonText: "Đóng lại",
-        showCancelButton: true,
+      
       }).then((result) => {
         if (result.value) {
           that.flagShowLoader = true;
@@ -48,13 +45,6 @@ export default {
                   x: "right",
                   y: "bottom",
                 },
-                types: [
-                  {
-                    type: "error",
-                    duration: 8000,
-                    dismissible: true,
-                  },
-                ],
               });
               if (response.data.status == 403) {
                 setTimeout(function () {
