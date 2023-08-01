@@ -24,10 +24,7 @@
                         <span class="hide-menu">Thống kê</span>
                     </a>
                 </li>
-                <li class="nav-small-cap">
-                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">UI COMPONENTS</span>
-                </li>
+
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="{{ route('employer.package.index') }}" aria-expanded="false">
                         <span>
@@ -96,10 +93,7 @@
                         <span class="hide-menu">Giấy phép kinh doanh</span>
                     </a>
                 </li>
-                <li class="nav-small-cap">
-                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">Chức năng</span>
-                </li>
+               
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="{{ route('employer.payment-for-emplyer.index') }}"
                         aria-expanded="false">
@@ -108,6 +102,10 @@
                         </span>
                         <span class="hide-menu">Nạp tiền</span>
                     </a>
+                </li>
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">UI COMPONENTS</span>
                 </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="{{ route('employer.payment-history.index') }}" aria-expanded="false">

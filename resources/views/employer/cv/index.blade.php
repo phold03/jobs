@@ -70,25 +70,21 @@
         </div>
         <div class="content">
             <div class="container">
-                <div class="row">
+                <div lass="custom-container>
                     @foreach ($cv as $item)
                         <div class="col-lg-4">
                             <div class="text-center card-box">
                                 <div class="member-card pt-2 pb-2">
                                     <div class="thumb-lg member-thumb mx-auto" style="width: 200px;">
-                                        <img src="{{ asset($item->images) }}" class="rounded-circle img-thumbnail"
-                                            alt="profile-image">
-                                    </div>
-                                    <div class="mt-2">
-                                        <h4>{{ $item->name }}</h4>
-                                        <p class="text-muted"> </span><span><a
-                                                    href="{{ route('employer.search.show', $item->id) }}"
-                                                    class="text-pink">{{ $item->majors }}</a></span></p>
-                                    </div>
-                                    <a href="{{ route('employer.search.show', $item->id) }}"
-                                        class="btn btn-primary mt-3 btn-rounded waves-effect w-md waves-light mb-4">Xem chi
-                                        tiết</a>
-                                </div>
+                                    <div class="custom-mt-2">
+                                <h4>{{ $item->name }}</h4>
+                                <p class="custom-text-muted">
+                                    <a href="{{ route('employer.search.show', $item->id) }}" class="custom-text-pink">{{ $item->majors }}</a>
+                                </p>
+                            </div>
+                            <a href="{{ route('employer.search.show', $item->id) }}"
+                                class="custom-btn custom-btn-primary custom-mt-3 custom-btn-rounded custom-w-md custom-waves-effect custom-waves-light custom-mb-4">Xem chi
+                                tiết</a>
                             </div>
                         </div>
                     @endforeach
