@@ -6,6 +6,7 @@ use App\Enums\StatusCode;
 use App\Events\User\MailApplyJobEvent;
 use App\Models\Company;
 use App\Models\Favourite;
+use App\Models\FilterApplyJob;
 use App\Models\Job;
 use App\Models\Jobseeker;
 use App\Models\Jobskill;
@@ -43,7 +44,7 @@ class HomeController extends BaseController
             'location_id' => '',
             'majors_id' => ''
         ];
-        $jobSeekerForUser =  Auth::guard('user')->check() ? Jobseeker::query()->where('user_id', Auth::guard('user')->user()->id)->first()->toArray()   : $array;
+        $jobSeekerForUser =  Auth::guard('user')->check() && Auth::guard('user')->user()->role_id == 1 && User::query()->find(Auth::guard('user')->user()->id)->getCheckUser ? Jobseeker::query()->where('user_id', Auth::guard('user')->user()->id)->first()->toArray()   : $array;
         $jobForUser = Job::query()
             ->join('employer', 'employer.id', '=', 'job.employer_id')
             ->join('company', 'company.id', '=', 'employer.id_company')
@@ -133,12 +134,14 @@ class HomeController extends BaseController
             $cv = UploadCv::query()->where('user_id', Auth::guard('user')->user()->id)->get();
             $checkJob = SaveCv::query()->where([
                 ['id_job', $id],
-                ['user_id', Auth::guard('user')->user()->id]
+                ['user_id', Auth::guard('user')->user()->id],
+                ['status', 0],
             ])->first();
             if ($checkJob) {
-                if ($checkJob->id_job) {
+                if ($checkJob->id_job && $checkJob->status != 2) {
                     $checkJobTrue = 1;
-                } else {
+                }
+                if ($checkJob->id_job && $checkJob->status == 2) {
                     $checkJobTrue = 0;
                 }
             } else {
@@ -156,14 +159,16 @@ class HomeController extends BaseController
     // upload cv
     public function upCv(Request $request)
     {
+        $checkFilterUserApply = FilterApplyJob::query()->where('seeker_id', Auth::guard('user')->user()->id)->first();
+        if ($checkFilterUserApply) {
+            $this->setFlash(__('Bạn đã nằm trong danh sách bị cấm nộp cv vào cty chúng tôi'), 'error');
+            return redirect()->back();
+        }
         if (!Auth::guard('user')->check()) {
             $this->setFlash(__('Bạn cần đăng nhập hoặc đăng ký để trải nghiệm dịch vụ của chúng tôi'), 'error');
             return redirect()->back();
         }
-        $checkJob = SaveCv::query()->where([
-            ['id_job', $request->id_job],
-            ['user_id', Auth::guard('user')->user()->id]
-        ])->first();
+        $checkJob = new SaveCv();
         if ($checkJob) {
             $cvSave = $checkJob;
             $cvUpload = $checkJob;
@@ -173,21 +178,20 @@ class HomeController extends BaseController
         }
 
         if (isset($request->file_cv)) {
+            $user = User::query()->find(Auth::guard('user')->user()->id);
+            if (count($user->getploadCv) == 2) {
+                $this->setFlash(__('Số lượng cv của bạn thêm vào đã vượt mức cho phép, mỗi tài khoản chỉ được thêm mới tối đa 2 cv'), 'error');
+                return redirect()->back();
+            }
             if ($request->save_cv) {
                 try {
-                    $user = User::query()->find(Auth::guard('user')->user()->id);
-                    if (count($user->getploadCv) == 2) {
-                        $this->setFlash(__('Số lượng cv của bạn thêm vào đã vượt mức cho phép, mỗi tài khoản chỉ được thêm mới tối đa 2 cv'), 'error');
-                        return redirect()->back();
-                    } else {
-                        $cvSave->title = $request->title;
-                        $cvSave->user_id = Auth::guard('user')->user()->id;
-                        $cvUpload->status = 0;
-                        if ($request->hasFile('file_cv')) {
-                            $cvSave->file_cv = $request->file_cv->storeAs('images/cv', $request->file_cv->hashName());
-                        }
-                        $cvSave->save();
+                    $cvSave->title = $request->title;
+                    $cvSave->user_id = Auth::guard('user')->user()->id;
+                    $cvUpload->status = 0;
+                    if ($request->hasFile('file_cv')) {
+                        $cvSave->file_cv = $request->file_cv->storeAs('images/cv', $request->file_cv->hashName());
                     }
+                    $cvSave->save();
                     //
                     $cvUpload->title = $request->title;
                     $cvUpload->token = rand(00000, 99999);

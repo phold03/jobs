@@ -38,7 +38,7 @@
                                                 <h6 class="fw-semibold mb-1">{{ $item->title }}</h6>
                                             </a>
                                             <span class="fw-normal"><a
-                                                    href="{{ route('company.detail', $item->id) }}">{{ $item->nameCompany }}</a></span>
+                                                    href="{{ route('company.detail', $item->idCompany) }}">{{ $item->nameCompany }}</a></span>
                                         </td>
                                         <td class="border-bottom-0">
                                             <div class="align-items-center gap-2">
@@ -92,7 +92,7 @@
     </div>
     <script>
         async function Reason(id) {
-            const url = '/employers/new/get-data-reason/' + id.id_save_cv;
+            const url = '/users/get-data-reason/' + id.id_save_cv;
             await axios.get(url).then(function(res) {
                 $('#dataReasonCv').text(res.data.data.content);
             })

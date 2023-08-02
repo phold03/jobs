@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Employer;
 
 use App\Enums\StatusCode;
+use App\Events\Job\AcceptanceCvEvent;
 use App\Events\Job\JobApplyEvent;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
@@ -11,6 +12,7 @@ use App\Http\Requests\ReasonCvRequest;
 use App\Models\Accuracy;
 use App\Models\Company;
 use App\Models\Employer;
+use App\Models\FilterApplyJob;
 use App\Models\Job;
 use App\Models\Jobskill;
 use App\Models\Reason;
@@ -32,7 +34,11 @@ class NewEmployerController extends BaseController
 
         $checkCompany = Employer::query()->where('user_id', Auth::guard('user')->user()->id)->first();
         $company = Company::query()->find($checkCompany->id_company);
-        $accuracy = Accuracy::query()->where('user_id', $company->id)->first();
+        if ($company) {
+            $accuracy = Accuracy::query()->where('user_id', $company->id)->first();
+        } else {
+            $accuracy = null;
+        }
         $checkAcctive = true;
         if ($accuracy) {
             if ($accuracy->status == 1) {
@@ -269,7 +275,8 @@ class NewEmployerController extends BaseController
         $cv = SaveCv::query()->find($id);
         $cv->status = 1;
         $cv->save();
-        event(new JobApplyEvent($cv->user->email));
+        $employer = Employer::query()->where('user_id', Auth::guard('user')->user()->id)->first();
+        event(new JobApplyEvent($cv->user->email, $employer));
         return [
             'status' => 200,
         ];
@@ -290,6 +297,17 @@ class NewEmployerController extends BaseController
             if (!$reason->save()) {
                 $this->setFlash(__('Đã có một lỗi sảy ra'), 'error');
                 return back();
+            }
+            $company = Employer::query()->where('user_id', Auth::guard('user')->user()->id)->first();
+
+            event(new AcceptanceCvEvent($cv->user->email, $company, $request->reason));
+            if ($request->check_var) {
+                $filteer =  FilterApplyJob::query()->create([
+                    'employer_id' => $company->id,
+                    'seeker_id' => $cv->user_id,
+                    'content' => $request->reason,
+                ]);
+                $filteer->save();
             }
             $this->setFlash(__('Phản hồi thành công'));
             return back();
@@ -315,7 +333,11 @@ class NewEmployerController extends BaseController
             ->leftjoin('majors', 'majors.id', '=', 'job.majors_id')
             ->where([
                 ['employer.user_id', Auth::guard('user')->user()->id],
-                // ['save_cv.status', 0],
+                ['save_cv.status', '!=', 2],
+            ])
+            ->orwhere([
+                ['save_cv.status', 0],
+                ['save_cv.status', 1],
             ])
             ->select('job.id as job_id', 'users.name as user_name', 'users.images as images', 'save_cv.status as status', 'save_cv.id as cv_id', 'save_cv.file_cv as file_cv', 'save_cv.user_id as user_id', 'majors.name as majors_name', 'save_cv.created_at as create_at_sv', 'save_cv.token as token')
             ->get();
@@ -394,5 +416,42 @@ class NewEmployerController extends BaseController
                 'status' => StatusCode::FORBIDDEN,
             ], StatusCode::OK);
         }
+    }
+    public function refuse()
+    {
+        $cv = SaveCv::query()
+            ->join('job', 'job.id', '=', 'save_cv.id_job')
+            ->leftjoin('users', 'users.id', '=', 'save_cv.user_id')
+            ->join('employer', 'employer.id', '=', 'job.employer_id')
+            ->leftjoin('majors', 'majors.id', '=', 'job.majors_id')
+            ->where([
+                ['employer.user_id', Auth::guard('user')->user()->id],
+                ['save_cv.status', 2],
+            ])
+            ->select('job.id as job_id', 'users.name as user_name', 'users.images as images', 'save_cv.status as status', 'save_cv.id as cv_id', 'save_cv.file_cv as file_cv', 'save_cv.user_id as user_id', 'majors.name as majors_name', 'save_cv.created_at as create_at_sv', 'save_cv.token as token')
+            ->get();
+        return view('employer.new.refuse', [
+            'cv' => $cv
+        ]);
+    }
+    public  function filterApply()
+    {
+        $filter = FilterApplyJob::query()->get();
+        return view('employer.new.filter', [
+            'filter' => $filter
+        ]);
+    }
+    public function deletefilterApply($id)
+    {
+        if (FilterApplyJob::query()->find($id)->delete()) {
+            return response()->json([
+                'message' => 'Xóa thành công!',
+                'status' => StatusCode::OK,
+            ], StatusCode::OK);
+        }
+        return response()->json([
+            'message' => 'Có một lỗi không xác định đã xảy ra',
+            'status' => StatusCode::FORBIDDEN,
+        ], StatusCode::OK);
     }
 }

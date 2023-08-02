@@ -3,6 +3,10 @@
     <div class="card">
         <div class="card-body">
             <h5 class="card-title fw-semibold mb-4">Danh sách ứng viên nộp đơn</h5>
+            <a href="{{ route('employer.new.refuse') }}" class="btn btn-primary">Hồ sơ đã bị từ tối</a>
+            <a href="{{ route('employer.new.filterApply') }}" class="btn btn-primary" style="margin-left: 10px">Ứng viên bị cấm
+                nộp
+                lại hồ sơ</a>
             <div class="table-responsive mt-4">
                 <table class="table" id="dataTable" width="100%" cellspacing="0">
                     <thead>
@@ -69,6 +73,8 @@
                                                                     name="job_id">
                                                                 <label for="" class="form-label">Lý do</label>
                                                                 <textarea class="form-control" name="content" cols="30" rows="10" placeholder="mời bạn nhập"></textarea>
+                                                                
+                                                                <test-tap></test-tap>
                                                                 <button class="btn btn-primary mt-3" type="submit">Phản
                                                                     hồi</button>
                                                             </form>

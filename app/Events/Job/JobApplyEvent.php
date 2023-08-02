@@ -15,9 +15,11 @@ class JobApplyEvent
      * Create a new event instance.
      */
     public $email;
+    public $employer;
 
-    public function __construct($email)
+    public function __construct($email, $employer)
     {
         $this->email = $email;
+        $this->employer = $employer;
     }
 }
