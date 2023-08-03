@@ -87,7 +87,7 @@ Route::prefix('users')->name('users.')->group(function () {
 // logout
 Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
-// ntd 
+// ntd
 Route::prefix('employers')->name('employer.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::resource('/new', NewEmployerController::class);
@@ -103,7 +103,7 @@ Route::prefix('employers')->name('employer.')->group(function () {
     });
     // submitted work
     Route::get('submitted-work', [NewEmployerController::class, 'submittedWork'])->name('submittedWork');
-    // 
+    //
     Route::resource('/package', PackageController::class);
     Route::resource('/profile', ProfileEmployerController::class);
     Route::resource('/company', ProfileCompanyController::class);
