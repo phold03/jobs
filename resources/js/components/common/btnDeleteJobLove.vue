@@ -29,6 +29,11 @@ export default {
     showAlert() {
       let that = this
       this.$swal({
+        title: that.messageConfirm,
+        icon: 'warning',
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Đóng lại',
+        showCancelButton: true
       }).then((result) => {
         if (result.value) {
           that.flagShowLoader = true
@@ -40,6 +45,16 @@ export default {
             .then(function (response) {
               that.flagShowLoader = false
               $('.loading-div').addClass('hidden')
+              that
+                .$swal({
+                  title: response.data.message,
+                  icon: 'success',
+                  confirmButtonText: 'đóng lại'
+                })
+                .then(function () {
+                  //   window.location.href = that.listUrl;
+                  location.reload()
+                })
             })
             .catch((error) => {
               that.flagShowLoader = false
