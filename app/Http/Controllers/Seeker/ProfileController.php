@@ -8,6 +8,7 @@ use App\Models\Job;
 use App\Models\Jobseeker;
 use App\Models\KeyUserSearch;
 use App\Models\ProfileUserCv;
+use App\Models\SaveCv;
 use App\Models\SeekerSkill;
 use App\Models\Skill;
 use App\Models\User;
@@ -26,14 +27,27 @@ class ProfileController extends BaseController
     public function index()
     {
         $profileCv =  ProfileUserCv::where('user_id', Auth::guard('user')->user()->id)->first();
-        $apply = Job::query()
-            ->where('save_cv.user_id', Auth::guard('user')->user()->id)
-            ->leftjoin('save_cv', 'save_cv.id_job', '=', 'job.id')
+        $apply = SaveCv::where('save_cv.user_id', Auth::guard('user')->user()->id)
+            ->leftjoin('job', 'job.id', '=', 'save_cv.id_job')
             ->join('employer', 'employer.id', '=', 'job.employer_id')
+            ->join('location', 'location.id', '=', 'job.location_id')
+            ->join('majors', 'majors.id', '=', 'job.majors_id')
             ->join('company', 'company.id', '=', 'employer.id_company')
             ->Orderby('save_cv.created_at', 'DESC')
-            ->with('getMajors')
-            ->select('job.id as id', 'job.location_id', 'job.majors_id', 'job.slug as slug', 'job.title as title', 'company.id as idCompany', 'company.logo as logo', 'company.name as nameCompany', 'save_cv.created_at as created_at', 'save_cv.status as status', 'save_cv.file_cv as file')
+            ->select(
+                'job.id as id',
+                'job.slug as slug',
+                'job.title as title',
+                'company.id as idCompany',
+                'company.logo as logo',
+                'company.name as nameCompany',
+                'save_cv.created_at as created_at',
+                'save_cv.status as status',
+                'save_cv.file_cv as file',
+                'save_cv.id as id_save_cv',
+                'location.name as location',
+                'majors.name as majors',
+            )
             ->get();
         $keySearch = KeyUserSearch::query()->where('user_id', Auth::guard('user')->user()->id)->orderBy('count', 'desc')->get();
 
@@ -43,8 +57,14 @@ class ProfileController extends BaseController
             $SeekerId = SeekerSkill::query()->where('job-seeker_id', $jobSeeker->id)->pluck('skill_id');
             $skillSeeker = Skill::query()->whereIn('id', $SeekerId)->get();
         }
-        // skill seeeker
 
+        // số lượng ntd xem  hồ sơ
+
+        $countEmployerSeeCv = SaveCv::query()->where([
+            ['user_id', Auth::guard('user')->user()->id],
+            ['status', '>=', 1],
+        ])->get()->count();
+        $user = Auth::guard('user')->user()->images;
         return view('seeker.index', [
             'profileCv' => $profileCv,
             'lever' => $this->getlever(),
@@ -57,6 +77,8 @@ class ProfileController extends BaseController
             'keySearch' => $keySearch ?? [],
             'jobSeeker' => $jobSeeker ?? [],
             'skillSeeker' => $skillSeeker ?? [],
+            'countEmployerSeeCv' => $countEmployerSeeCv,
+            'user' => $user,
         ]);
     }
     public function onStatus(Request $request)
@@ -134,6 +156,21 @@ class ProfileController extends BaseController
             DB::rollBack();
             $this->setFlash(_('Đã có một lỗi xảy ra'));
             return redirect()->back();
+        }
+    }
+    public function changeImage(Request $request)
+    {
+        try {
+            $user = User::query()->find(Auth::guard('user')->user()->id);
+            if ($request->hasFile('file_cv')) {
+                $user->images = $request->file_cv->storeAs('images/cv', $request->file_cv->hashName());
+            }
+            $user->save();
+            $this->setFlash(__('Thay đôi thành công!'));
+            return back();
+        } catch (\Throwable $th) {
+            $this->setFlash(__('Đã có một lỗi xảy ra', 'error'));
+            return back();
         }
     }
 }

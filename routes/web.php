@@ -11,6 +11,7 @@ use App\Http\Controllers\Employer\PaymentHistoryController;
 use App\Http\Controllers\Employer\ProfileCompanyController;
 use App\Http\Controllers\Employer\ProfileEmployerController;
 use App\Http\Controllers\Employer\SearchCvController;
+use App\Http\Controllers\FagsController;
 use App\Http\Controllers\HomeController as ControllersHomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Seeker\ManageController;
@@ -61,6 +62,10 @@ Route::prefix('cong-ty')->name('company.')->group(function () {
     Route::get('/', [CompanyController::class, 'index'])->name('index');
 });
 
+
+// faqs
+Route::resource('faqs', FagsController::class);
+
 // search job
 Route::get('/search', [ControllersHomeController::class, 'search'])->name('home.search');
 
@@ -70,6 +75,7 @@ Route::middleware('checkLogin')->group(function () {
 
         Route::prefix('profile')->name('profile.')->group(function () {
             Route::get('/{slug}', [ProfileController::class, 'index'])->name('index');
+            Route::post('/update-image-user', [ProfileController::class, 'changeImage'])->name('changeImage');
             Route::post('/on-status-profile', [ProfileController::class, 'onStatus'])->name('onStatus');
             Route::post('/off-status-profile', [ProfileController::class, 'offStatus'])->name('offStatus');
         });
