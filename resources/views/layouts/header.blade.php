@@ -5,9 +5,9 @@
 @endphp
 <div class="responsive-header">
     <div class="responsive-menubar">
-        <div class="res-logo"><a href="{{ route('home') }}" title=""><img
-                    src="{{ asset('home/images/resource/logo.png') }}" alt="" /></a>
-        </div>
+        {{-- <div class="res-logo"><a href="{{ route('home') }}" title=""><img
+                    src="{{ asset(Auth::guard('user')->user()->images) }}" alt="" /></a>
+        </div> --}}
         <div class="menu-resaction">
             <div class="res-openmenu">
                 <img src="{{ asset('home/images/icon.png') }}" alt="" /> Menu
