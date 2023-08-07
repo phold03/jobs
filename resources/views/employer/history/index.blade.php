@@ -5,7 +5,8 @@
 @section('main-employer')
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">Lịch sử giao dịch</h5>
+            <!-- <h5 class="card-title fw-semibold mb-4">Lịch sử giao dịch</h5> -->
+            <h5 class="custom-card-title fw-semibold mb-4">Lịch sử giao dịch</h5>
             <div class="col-lg-12 d-flex align-items-stretch">
                 <div class="card w-100">
                     <div class="card-body">
@@ -13,17 +14,26 @@
                             <ul class="timeline-widget mb-0 position-relative">
                                 <li class="timeline-item d-flex position-relative overflow-hidden">
                                     <div class="timeline-time text-dark flex-shrink-0 text-end">
-                                        {{ Carbon::parse($item->created_at)->format('d-m-yy') }}</div>
-                                    <div class="timeline-badge-wrap d-flex flex-column align-items-center"
-                                    >
-                                        <span
-                                            class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
-                                        <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                                    </div>
-                                    <div class="timeline-desc fs-3 text-dark">{{ $item->desceibe }}
+                                        {{ Carbon::parse($item->created_at)->format('d-m-yy') }}
                                         <br>
-                                        {{ number_format($item->price) }}đ
-                                    </div>
+                                        @if ($item->status == 1)
+                                        <span class="p-2 custom-text-info" role="alert">
+                                            Thành công
+                                        </span>
+                                    @else
+                                        <span class="p-2 custom-text-danger" role="alert">
+                                            Bị hủy
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="custom-timeline-badge-wrap d-flex flex-column align-items-center">
+                                    <span class="custom-timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
+                                    <span class="custom-timeline-badge-border d-block flex-shrink-0"></span>
+                                </div>
+                                <div class="custom-timeline-desc fs-3 text-dark">{{ $item->desceibe }}
+                                    <br>
+                                    {{ number_format($item->price) }}đ
+                                </div>
                                 </li>
                             </ul>
                         @endforeach

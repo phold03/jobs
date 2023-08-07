@@ -9,7 +9,7 @@ define( [
 jQuery.each( [
 	"ajaxStart",
 	"ajaxStop",
-	"ajaxComplete",
+	"ajaxComplete",  
 	"ajaxError",
 	"ajaxSuccess",
 	"ajaxSend"

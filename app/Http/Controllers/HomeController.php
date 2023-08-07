@@ -7,10 +7,12 @@ use App\Events\User\MailApplyJobEvent;
 use App\Models\Company;
 use App\Models\Favourite;
 use App\Models\Job;
+use App\Models\Jobseeker;
 use App\Models\Jobskill;
 use App\Models\KeyUserSearch;
 use App\Models\location;
 use App\Models\Majors;
+use App\Models\News;
 use App\Models\SaveCv;
 use App\Models\UploadCv;
 use App\Models\User;
@@ -30,9 +32,18 @@ class HomeController extends BaseController
         $majors = Majors::query()->get();
 
         $location = location::query()->get();
+        // news 
+        $news = News::query()->with('majors')->limit(3)->get();
 
         $allJob = Job::query()->get();
         // Việc làm nổi bật
+        $array = [
+            'experience_id' => '',
+            'wage_id' => '',
+            'location_id' => '',
+            'majors_id' => ''
+        ];
+        $jobSeekerForUser =  Auth::guard('user')->check() ? Jobseeker::query()->where('user_id', Auth::guard('user')->user()->id)->first()->toArray()   : $array;
         $jobForUser = Job::query()
             ->join('employer', 'employer.id', '=', 'job.employer_id')
             ->join('company', 'company.id', '=', 'employer.id_company')
@@ -41,6 +52,12 @@ class HomeController extends BaseController
                 ['job.expired', 0],
                 ['job.package_id_position', 1],
                 ['employer.position', 1],
+            ])
+            ->orWhere([
+                ['job.experience_id', $jobSeekerForUser['experience_id']],
+                ['job.wage_id', $jobSeekerForUser['wage_id']],
+                ['job.location_id', $jobSeekerForUser['location_id']],
+                ['job.majors_id', $jobSeekerForUser['majors_id']],
             ])
             ->select('job.*', 'company.logo as logo', 'company.id as idCompany', 'company.name as nameCompany', 'company.address as addressCompany')
             ->orderBy('employer.prioritize', 'desc')
@@ -61,6 +78,12 @@ class HomeController extends BaseController
             ->orwhere([
                 ['employer.position', 0]
             ])
+            ->orWhere([
+                ['job.experience_id', $jobSeekerForUser['experience_id']],
+                ['job.wage_id', $jobSeekerForUser['wage_id']],
+                ['job.location_id', $jobSeekerForUser['location_id']],
+                ['job.majors_id', $jobSeekerForUser['majors_id']],
+            ])
             ->select('job.*', 'company.logo as logo', 'company.id as idCompany', 'company.name as nameCompany', 'company.address as addressCompany')
             ->orderBy('employer.prioritize', 'desc')
             ->get();
@@ -73,6 +96,7 @@ class HomeController extends BaseController
             'company' => $company,
             'countJob' => $allJob->count(),
             'jobAttractive' => $jobAttractive,
+            'news' => $news,
         ]);
     }
 
@@ -234,20 +258,22 @@ class HomeController extends BaseController
     }
     public function search(Request $request)
     {
-        if ($request->key) {
-            $checkKeySearch = KeyUserSearch::query()->where('key', $request->key)->first();
-            if ($checkKeySearch) {
-                if ($checkKeySearch->key == $request->key) {
-                    $keySearch = $checkKeySearch;
-                    $keySearch->count += 1;
+        if (Auth::guard('user')->check()) {
+            if ($request->key) {
+                $checkKeySearch = KeyUserSearch::query()->where('key', $request->key)->first();
+                if ($checkKeySearch) {
+                    if ($checkKeySearch->key == $request->key) {
+                        $keySearch = $checkKeySearch;
+                        $keySearch->count += 1;
+                    }
+                } else {
+                    $keySearch = new KeyUserSearch();
+                    $keySearch->count = 1;
                 }
-            } else {
-                $keySearch = new KeyUserSearch();
-                $keySearch->count = 1;
+                $keySearch->key = $request->key;
+                $keySearch->user_id = Auth::guard('user')->user()->id;
+                $keySearch->save();
             }
-            $keySearch->key = $request->key;
-            $keySearch->user_id = Auth::guard('user')->user()->id;
-            $keySearch->save();
         }
         $that = $request;
         $data = Job::query()
