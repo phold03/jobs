@@ -1,7 +1,7 @@
 @extends('employer.layout.index')
 @section('main-employer')
     <div class="container">
-        <change-password
+        <change-password>
             :data="{{ json_encode([
                 'urlStore' => route('employer.changePasswordSucsses'),
             ]) }}">

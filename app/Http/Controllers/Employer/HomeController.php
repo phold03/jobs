@@ -84,10 +84,12 @@ class HomeController extends BaseController
             'countCvMoth12' => $this->getDataMouth(12, $checkCompany->id, $request->all()),
         ]);
     }
+    //view doi mat khau
     public  function changePassword()
     {
         return  view('employer.changePassword');
     }
+    //xu ly doi mat khau
     public  function changePasswordSucsses(Request  $request)
     {
         try {
