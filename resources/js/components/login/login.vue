@@ -36,7 +36,7 @@
         <a href="#" title="">Quên mật khẩu?</a>
         <button type="submit">Đăng nhập</button>
       </form>
-      <div class="extra-login">
+      <!-- <div class="extra-login">
         <span>Or</span>
         <div class="login-social">
           <a class="fb-login" href="#" title=""
@@ -46,7 +46,7 @@
             ><i class="fa fa-twitter"></i
           ></a>
         </div>
-      </div>
+      </div> -->
     </div>
   </VeeForm>
 </template>
