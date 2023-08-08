@@ -13,13 +13,13 @@ class AdminSeeder extends Seeder
      *
      * @return void
      */
-    // public function run()
-    // {
-    //     $system = new Admin();
-    //     $system->name = 'admin';
-    //     $system->email = 'admin@gmail.com';
-    //     $system->password = Hash::make('12345678');
-    //     $system->role = 2;
-    //     $system->save();
-    // }
+    public function run()
+    {
+        $system = new Admin();
+        $system->name = 'admin';
+        $system->email = 'admin@gmail.com';
+        $system->password = Hash::make('12345678');
+        $system->role = 2;
+        $system->save();
+    }
 }
