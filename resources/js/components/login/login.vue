@@ -87,22 +87,22 @@ export default {
     console.log(this.data);
   },
   created() {
-    let messError = {
-      en: {
-        fields: {
-          email: {
-            required: "Email không được để trống",
-            email: "Email không đúng định dạng",
-          },
+    // let messError = {
+    //   en: {
+    //     fields: {
+    //       email: {
+    //         required: "Email không được để trống",
+    //         email: "Email không đúng định dạng",
+    //       },
 
-          password: {
-            required: "Password không được để trống",
-            min: "Mật khẩu dài từ 8 đến 16 ký tự",
-            max: "Mật khẩu dài từ 8 đến 16 ký tự",
-          },
-        },
-      },
-    };
+    //       password: {
+    //         required: "Password không được để trống",
+    //         min: "Mật khẩu dài từ 8 đến 16 ký tự",
+    //         max: "Mật khẩu dài từ 8 đến 16 ký tự",
+    //       },
+    //     },
+    //   },
+    // };
     configure({
       generateMessage: localize(messError),
     });
