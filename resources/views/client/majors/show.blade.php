@@ -43,14 +43,7 @@
                             @endforeach
                         </div>
                         {{-- paginate --}}
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 job-list browse-all-cat">
-                                <span class="text-center p-3 ">
-                                    <div id="pagination-numbers" style="margin-bottom: 20px">
-                                    </div>
-                                </span>
-                            </div>
-                        </div>
+                        
                         {{-- end paginate --}}
                     </div>
 
