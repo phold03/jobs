@@ -49,7 +49,60 @@
             </select>
           </div>
         </div>
-      
+        <div class="col-6">
+          <div class="form-group mt-2">
+            <label for="">Kinh nghiệm ngành/nghề đã chọn*</label>
+            <select
+              name="experience"
+              as="select"
+              v-model="category.experience"
+              class="form-control mt-2"
+              rules="required"
+            >
+              <option
+                v-for="item in data.experience"
+                :key="item.id"
+                :value="item.id"
+              >
+                {{ item.label }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group mt-2">
+            <label for="">Kỹ năng*</label>
+            <Multiselect
+              placeholder="Chọn Kỹ năng"
+              class="mt-2"
+              mode="tags"
+              v-model="value"
+              :searchable="true"
+              :options="options"
+              label="label"
+              track-by="label"
+              :infinite="true"
+              :object="true"
+              :filterResults="true"
+              :clearOnSearch="true"
+              :clearOnSelect="true"
+              @input="updateSelected"
+            />
+            <input type="hidden" name="skill[]" v-model="skill" />
+          </div>
+          <div class="form-group mt-2">
+            <label for="">Mức lương mong muốn*</label>
+            <select
+              name="wage"
+              as="select"
+              v-model="category.wage"
+              rules="required"
+              class="form-control mt-2"
+            >
+              <option v-for="item in data.wage" :key="item.id" :value="item.id">
+                {{ item.label }}
+              </option>
+            </select>
+          </div>
+        </div>
         <div class="submit text-center">
           <button class="btn btn-primary mt-3 col-2 mb-3">Lọc</button>
         </div>
