@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <VeeForm as="div" v-slot="{ handleSubmit }" @invalid-submit="onInvalidSubmit">
     <div class="account-popup">
       <span class="close-popup"><i class="la la-close"></i></span>
@@ -131,4 +131,4 @@ export default {
   color: red;
 }
 </style>
-   -->
+  
