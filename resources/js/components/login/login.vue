@@ -127,8 +127,8 @@ export default {
 };
 </script>
 <style>
-.error {
+/* .error {
   color: red;
-}
+} */
 </style>
   
