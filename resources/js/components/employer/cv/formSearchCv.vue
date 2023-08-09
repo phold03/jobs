@@ -150,18 +150,18 @@ export default {
   },
   props: ["data"],
   methods: {
-    // updateSelected(e) {
-    //   let array = [];
-    //   e.map((x) => {
-    //     array.push(x.value);
-    //   });
-    //   array = [...new Set(array)];
-    //   this.skill = array;
-    // },
-    // onSubmit() {
-    //   this.flagShowLoader = true;
-    //   this.$refs.formData.submit();
-    // },
+    updateSelected(e) {
+      let array = [];
+      e.map((x) => {
+        array.push(x.value);
+      });
+      array = [...new Set(array)];
+      this.skill = array;
+    },
+    onSubmit() {
+      this.flagShowLoader = true;
+      this.$refs.formData.submit();
+    },
   },
 };
 </script>
