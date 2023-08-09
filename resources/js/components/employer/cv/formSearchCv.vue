@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <form method="get" v-on:submit="onSubmit">
     <div class="opption p-2">
       <div class="row p-4">
@@ -165,4 +165,4 @@ export default {
   },
 };
 </script>
-<style src="@vueform/multiselect/themes/default.css"></style> -->
+<style src="@vueform/multiselect/themes/default.css"></style>
