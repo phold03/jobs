@@ -49,25 +49,7 @@
             </select>
           </div>
         </div>
-        <div class="col-6">
-          <div class="form-group mt-2">
-            <label for="">Kinh nghiệm ngành/nghề đã chọn*</label>
-            <select
-              name="experience"
-              as="select"
-              v-model="category.experience"
-              class="form-control mt-2"
-              rules="required"
-            >
-              <option
-                v-for="item in data.experience"
-                :key="item.id"
-                :value="item.id"
-              >
-                {{ item.label }}
-              </option>
-            </select>
-          </div>
+        
           <div class="form-group mt-2">
             <label for="">Kỹ năng*</label>
             <Multiselect
