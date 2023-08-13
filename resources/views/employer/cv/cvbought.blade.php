@@ -64,7 +64,7 @@
                                 <div class="member-card pt-2 pb-2">
                                     <div class="thumb-lg member-thumb mx-auto">
                                         <img src="{{ asset($item->profileCv->images) }}"
-                                            class="rounded-circle img-thumbnail" alt="profile-image" style="width: 150px; height: 150px;">
+                                             class="rounded-circle img-thumbnail" alt="profile-image" style="width: 150px; height: 150px;">
                                     </div>
                                     <div class="">
                                         <h4>{{ $item->profileCv->name }}</h4>
@@ -73,7 +73,7 @@
                                                     class="text-pink">{{ $item->profileCv->majors }}</a></span></p>
                                     </div>
                                     <a href="{{ route('employer.search.show', $item->profileCv->id) }}"
-                                        class="btn btn-primary mt-3 btn-rounded waves-effect w-md waves-light">Xem chi
+                                       class="btn btn-primary mt-3 btn-rounded waves-effect w-md waves-light">Xem chi
                                         tiết</a>
                                 </div>
                             </div>
