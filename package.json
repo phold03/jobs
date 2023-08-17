@@ -19,10 +19,6 @@
        
     },
     "dependencies": {
-        "@coreui/coreui": "^4.2.6",
-        "@coreui/utils": "^2.0.2",
-        "@coreui/vue-chartjs": "^2.1.0",
-        "@popperjs/core": "^2.11.8",
         "@tinymce/tinymce-vue": "^5.1.0",
         "@vee-validate/i18n": "^4.9.6",
         "@vee-validate/rules": "^4.9.6",
