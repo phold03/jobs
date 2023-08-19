@@ -7,6 +7,5 @@
             'location' => $location,
             'request' => !empty($request) ? $request->all() : new stdClass(),
         ]) }}">
-
     </form-register>
 @endsection

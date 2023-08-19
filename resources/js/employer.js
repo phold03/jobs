@@ -60,6 +60,9 @@ app.component('btn-delete', btnDelete);
 import btnExtension from "./components/common/btnPayment.vue";
 app.component('btn-extension', btnExtension);
 // nâng cấp gói cước
+// rating
+import RatingCv from 'vue-star-rating'
+app.component('rating-cv', RatingCv)
 import btnUpgrade from "./components/employer/package/upgrade.vue";
 app.component('btn-upgrade', btnUpgrade);
 import changePassword from "./components/seeker/changePassword.vue";

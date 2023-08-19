@@ -1,28 +1,5 @@
-@extends('employer.layout.index')
-@section('main-employer')
+
     <style>
-        .card {
-            width: 350px;
-            background-color: #efefef;
-            border: none;
-            cursor: pointer;
-            transition: all 0.5s;
-        }
-
-        .image img {
-            transition: all 0.5s
-        }
-
-        .card:hover .image img {
-            transform: scale(1.5)
-        }
-
-        .btn {
-            height: 140px;
-            width: 140px;
-            border-radius: 50%
-        }
-
         .name {
             font-size: 22px;
             font-weight: bold
@@ -39,27 +16,21 @@
 
         .number {
             font-size: 22px;
-            font-weight: bold
         }
 
         .follow {
             font-size: 12px;
             font-weight: 500;
-            color: #444444
         }
 
         .btn1 {
             height: 40px;
             width: 150px;
-            border: none;
-            background-color: #000;
-            color: #aeaeae;
-            font-size: 15px
+           
         }
 
         .text span {
             font-size: 13px;
-            color: #545454;
             font-weight: 500
         }
 
@@ -71,15 +42,6 @@
             border: 1px solid
         }
 
-        .join {
-            font-size: 14px;
-            color: #a0a0a0;
-            font-weight: bold
-        }
-
-        .date {
-            background-color: #ccc
-        }
     </style>
     <div class="card">
         <div class="card-body">
@@ -106,3 +68,4 @@
         </div>
     </div>
 @endsection
+>>>>>>> 1da27c73eba5581f0ab28d598716af6b2cd65587

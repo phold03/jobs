@@ -1,9 +1,4 @@
 $(function () {
-
-
-  // =====================================
-  // Profit
-  // =====================================
   var chart = {
     series: [
       { name: "Earnings this month:", data: [355, 390, 300, 350, 390, 180, 355, 390] },
@@ -62,27 +57,6 @@ $(function () {
         style: { cssClass: "grey--text lighten-2--text fill-color" },
       },
     },
-
-
-    yaxis: {
-      show: true,
-      min: 0,
-      max: 400,
-      tickAmount: 4,
-      labels: {
-        style: {
-          cssClass: "grey--text lighten-2--text fill-color",
-        },
-      },
-    },
-    stroke: {
-      show: true,
-      width: 3,
-      lineCap: "butt",
-      colors: ["transparent"],
-    },
-
-
     tooltip: { theme: "light" },
 
     responsive: [

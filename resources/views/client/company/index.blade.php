@@ -4,7 +4,7 @@
         <div class="block no-padding">
             <div class="container fluid">
                 <div class="row">
-                    <div class="col-lg-12">
+                <div class="col-lg-12">
                         <div class="main-featured-sec">
                             <div class="new-slide">
                                 <img src="{{ asset('home/images/resource/vector-1.png') }}">
@@ -37,7 +37,6 @@
                             </div>
                         </div>
                     @endforeach
-
                 </div>
             </div>
         </div>

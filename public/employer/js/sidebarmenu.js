@@ -1,12 +1,3 @@
-/*
-Template Name: Admin Template
-Author: Wrappixel
-
-File: js
-*/
-// ==============================================================
-// Auto select left navbar
-// ==============================================================
 $(function () {
     "use strict";
     var url = window.location + "";
@@ -17,19 +8,6 @@ $(function () {
     var element = $("ul#sidebarnav a").filter(function () {
       return this.href === url || this.href === path; // || url.href.indexOf(this.href) === 0;
     });
-    element.parentsUntil(".sidebar-nav").each(function (index) {
-      if ($(this).is("li") && $(this).children("a").length !== 0) {
-        $(this).children("a").addClass("active");
-        $(this).parent("ul#sidebarnav").length === 0
-          ? $(this).addClass("active")
-          : $(this).addClass("selected");
-      } else if (!$(this).is("ul") && $(this).children("a").length === 0) {
-        $(this).addClass("selected");
-      } else if ($(this).is("ul")) {
-        $(this).addClass("in");
-      }
-    });
-  
     element.addClass("active");
     $("#sidebarnav a").on("click", function (e) {
       if (!$(this).hasClass("active")) {
